@@ -1,6 +1,21 @@
-import pygame, csv, os, random, math
-from common_imports import scrInfo, white, green, red, quitExp
+import pygame, csv, os, random, math, sys
 
+scrInfo = pygame.display.Info()
+#rgb-colors
+black = (0,0,0)
+white = (255,255,255)
+green = (0,96,27)
+red = (225,0,25)
+
+def quitExp():
+    quitDlg = gui.Dlg(title="Quit Experiment?")
+    quitDlg.addText("Quit Experiment?")
+    quitDlg.show()  # show dialog and wait for OK or Cancel
+    if quitDlg.OK:
+        pygame.quit()
+        sys.exit()
+    else:
+       pass
 
 def drawContinue(Screen, feedback, feedback_color):
     button_img = pygame.image.load("material//img//continue.png").convert_alpha()

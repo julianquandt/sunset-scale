@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: sunset-scale
-Version: 0.0.1
+Version: 0.0.2
 Summary: A circular scale to assess ratings, rating-times, action-initiation-times and mouse-tracks.
 Home-page: https://github.com/julianquandt/sunset_scale
 Author: Julian Quandt
