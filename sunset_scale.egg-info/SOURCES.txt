@@ -1,0 +1,8 @@
+README.md
+setup.py
+sunset_scale/__init__.py
+sunset_scale/sunset_scale.py
+sunset_scale.egg-info/PKG-INFO
+sunset_scale.egg-info/SOURCES.txt
+sunset_scale.egg-info/dependency_links.txt
+sunset_scale.egg-info/top_level.txt
