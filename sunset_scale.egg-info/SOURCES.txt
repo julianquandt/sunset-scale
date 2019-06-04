@@ -7,6 +7,10 @@ sunset_scale.egg-info/PKG-INFO
 sunset_scale.egg-info/SOURCES.txt
 sunset_scale.egg-info/dependency_links.txt
 sunset_scale.egg-info/top_level.txt
+sunset_scale/packageData/arc_scale.psd
+sunset_scale/packageData/arc_scale_2.psd
 sunset_scale/packageData/arc_scale_blue.png
 sunset_scale/packageData/arc_scale_green.png
 sunset_scale/packageData/arc_scale_red_green.png
+sunset_scale/packageData/continue.png
+sunset_scale/packageData/continue_mouseover.png

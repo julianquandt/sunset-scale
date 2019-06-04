@@ -1,4 +1,2 @@
 include README.md
-include sunset_scale/packageData/arc_scale_blue.png
-include sunset_scale/packageData/arc_scale_green.png
-include sunset_scale/packageData/arc_scale_red_green.png
+include sunset_scale/packageData/*

@@ -1,4 +1,5 @@
 import pygame, csv, os, random, math, sys
+from psychopy import gui
 
 scrInfo = pygame.display.Info()
 #rgb-colors
@@ -6,6 +7,14 @@ black = (0,0,0)
 white = (255,255,255)
 green = (0,96,27)
 red = (225,0,25)
+
+this_folder = os.path.abspath(os.path.dirname(__file__))
+continue_file = os.path.join(this_folder, 'packageData//continue.png')
+continue_mouseover_file = os.path.join(this_folder, 'packageData//continue_mouseover.png')
+arc_scale_regular_file = os.path.join(this_folder, 'packageData//arc_scale_regular.png')
+arc_scale_green_file = os.path.join(this_folder, 'packageData//arc_scale_green.png')
+arc_scale_blue_file = os.path.join(this_folder, 'packageData//arc_scale_blue.png')
+
 
 def quitExp():
     quitDlg = gui.Dlg(title="Quit Experiment?")
@@ -18,8 +27,8 @@ def quitExp():
        pass
 
 def drawContinue(Screen, feedback, feedback_color):
-    button_img = pygame.image.load("material//img//continue.png").convert_alpha()
-    button_mouseover_img = pygame.image.load("material//img//continue_mouseover.png").convert_alpha()
+    button_img = pygame.image.load(continue_file).convert_alpha()
+    button_mouseover_img = pygame.image.load(continue_mouseover_file).convert_alpha()
     feedback_font = pygame.font.SysFont('Arial', 50)
     feedback_text = feedback_font.render(str(feedback), True, feedback_color)
     cont = False
@@ -187,11 +196,11 @@ def ratingTrial(df_name_rating, df_name_mouse, pp_info, Screen, stimulus, r_scal
     arc_init_y = int(scrInfo.current_h*0.9)+int(pos[1]) # y-value of the starting-point: 90 percent to the bottom of the win
 
     if scale_color == "red_green":
-        scale_img = pygame.image.load("material//img//arc_scale_regular.png").convert_alpha() # load the visual scale image #TODO: make this scalable
+        scale_img = pygame.image.load(arc_scale_regular_file).convert_alpha() # load the visual scale image #TODO: make this scalable
     elif scale_color == "green":
-        scale_img = pygame.image.load("material//img//arc_scale_green.png").convert_alpha() # load the visual scale image #TODO: make this scalable
+        scale_img = pygame.image.load(arc_scale_green_file).convert_alpha() # load the visual scale image #TODO: make this scalable
     else:
-        scale_img = pygame.image.load("material//img//arc_scale_blue.png").convert_alpha() # load the visual scale image #TODO: make this scalable
+        scale_img = pygame.image.load(arc_scale_blue_file).convert_alpha() # load the visual scale image #TODO: make this scalable
 
     tick_font = pygame.font.SysFont('Arial', tick_size, bold=True)
     stim_number_font = pygame.font.SysFont('Arial', 120, bold = True)
