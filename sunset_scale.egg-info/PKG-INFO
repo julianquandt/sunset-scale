@@ -1,12 +1,17 @@
 Metadata-Version: 2.1
 Name: sunset-scale
-Version: 0.0.7
+Version: 0.0.8
 Summary: A circular scale to assess ratings, rating-times, action-initiation-times and mouse-tracks.
 Home-page: https://github.com/julianquandt/sunset_scale
 Author: Julian Quandt
 Author-email: julian_quandt@live.de
 License: UNKNOWN
-Description: UNKNOWN
+Description: # Sunset Scale
+        
+        A circular rating-scale that can be used to assess ratings of pictures or objects, action-initiation/non-decision time, rating-time and mouse-data during the rating.
+        
+        Install with `pip install git+git://github.com/julianquandt/sunset_scale` or if that does not work `python -m pip install git+git://github.com/julianquandt/sunset_scale`
+        
 Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License

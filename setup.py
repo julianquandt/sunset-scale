@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="sunset-scale",
-    version="0.0.7",
+    version="0.0.8",
     author="Julian Quandt",
     author_email="julian_quandt@live.de",
     description="A circular scale to assess ratings, rating-times, action-initiation-times and mouse-tracks.",

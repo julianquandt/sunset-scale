@@ -52,7 +52,7 @@ def drawContinue(Screen, feedback, feedback_color):
                     cont = True
 
 
-def createRatingStimList(n_calibration, scale_anchors, stimulus, n_reps):
+def createRatingStimList(scale_anchors, stimulus, n_reps):
     # adding "calibration-trials" to the target-trials, i.e. numbers that need to be matched on the scale (optional)
     ran_values_set = [round(random.randint(scale_anchors[0], scale_anchors[1]-10),-1) for i in range(100)]
     ran_values_set = [int(i) for i in ran_values_set]
@@ -123,7 +123,6 @@ def saveMouseTrackingData(df_name_rating, pp_info, trial_number, stimulus, mouse
         added_vars = kwargs
     else:
         added_vars = None
-
     if not os.path.isfile(df_name_rating):
         with open(df_name_rating, "a") as dbf:
             wr = csv.writer(dbf, delimiter=',', lineterminator='\r')
@@ -166,9 +165,9 @@ def saveRatingData(df_name, pp_info, trial_number, stimulus,rating, rating_ord, 
 
 #TODO: add obligatory trajectory for the beginning of the trial to make it easier to analyze movements?
 def ratingTrial(df_name_rating, df_name_mouse, pp_info, Screen, stimulus, r_scale=0.8, pos=(0, 0),
-                show_stim="no_move_hide", scale_anchors=(0, 200), n_ticks=2, trial_number=0, scale=True,
-                label_list=None, instr_reminder=" ", scale_color="blue", tick_size=20,
-                time_line="pre", delay_time = 500, max_duration = 0, **kwargs):
+                show_stim="no_move_hide", scale_anchors=(0, 200), n_ticks=2, trial_number=0, scale_stim=True,
+                stim_dim_x=600, label_list=None, instr_reminder=" ", scale_color="blue", tick_size=20,
+                delay_time=500, max_duration=0, stim_type="pic", return_list=None, **kwargs):
     '''
     :param df_name_rating:  STR:    a file name or file-location in which the ratings should be stored
     :param df_name_mouse:   STR:    a file name for the mouse-tracking data
@@ -181,13 +180,14 @@ def ratingTrial(df_name_rating, df_name_mouse, pp_info, Screen, stimulus, r_scal
     :param scale_anchors:   TUPLE:  (min,max) minimum and maximum of scale
     :param n_ticks:         INT:    how many tick-marks should be displayed along the scale
     :param trial_number:    INT:    a trial number passed to the data-saving functions (is updated and returned here)
-    :param scale:           BOOL:   should presented pictures be scaled down to 600*X pixels?
+    :param scale_stim:      BOOL:   should presented pictures be scaled down to X pixels (dimensions in stimulus_dims)?
+    :param stim_dim_x:      INT:    X-dimension of the stimulus
     :param label_list:      LIST:   custom ticks (e.g. words) can be passed if needed instead of numbers
     :param instr_reminder:  STR:    a text that should be displayed above the scale as a reminder to participants
     :param scale_color:     STR:    "red_green", "green", "blue"; the color of the scale
     :param tick_size:       INT:    font-size of tick-marks in pixels
-    :param time_line:       STR:    an identifier of measurement timepoint that will be passed to data saving
     :param delay_time:      INT:    if the show_stim mode "delayed" is used, how long should the delay be?
+    :param stim_type:       STR:    whether the stimulus is a text or picture.
     :return:                        trial_number, stimulus_type, rating, non_dec_time
     '''
 
@@ -203,7 +203,6 @@ def ratingTrial(df_name_rating, df_name_mouse, pp_info, Screen, stimulus, r_scal
         scale_img = pygame.image.load(arc_scale_blue_file).convert_alpha() # load the visual scale image #TODO: make this scalable
 
     tick_font = pygame.font.SysFont('Arial', tick_size, bold=True)
-    stim_number_font = pygame.font.SysFont('Arial', 120, bold = True)
     instr_reminder_font = pygame.font.SysFont('Arial', 50)
     instr_reminder_text = instr_reminder_font.render(str(instr_reminder), True, (0,0,0))
 
@@ -212,13 +211,16 @@ def ratingTrial(df_name_rating, df_name_mouse, pp_info, Screen, stimulus, r_scal
     stim_name = str(stimulus)
     trial_number += 1
 
+    if stim_type == "pic":
+        stimulus_img = pygame.image.load(stimulus).convert_alpha()  # load the current stimulus-image from disk
+    if stim_type == "text":
+        stim_text_font = pygame.font.SysFont('Arial', 120, bold=True)
+        stimulus_img = stim_text_font.render(str(stimulus), True, (0,0,0))
 
-    stimulus_img = pygame.image.load(stimulus).convert_alpha()  # load the current stimulus-image from disk
     # display stimulus in the middle of the win
-    if scale == True:
-        if stimulus_img.get_rect().size[0] > 600:
-            stimulus_img = pygame.transform.scale(stimulus_img,
-                                                  (600, int(stimulus_img.get_rect().size[1]*(600.0/stimulus_img.get_rect().size[0]))))
+    if scale_stim == True:
+        stimulus_img = pygame.transform.scale(stimulus_img,
+                                                  (stim_dim_x, int(stimulus_img.get_rect().size[1]*(float(stim_dim_x)/stimulus_img.get_rect().size[0]))))
     stim_x = int(scrInfo.current_w/2-stimulus_img.get_rect().size[0]/2) # x-value of image display (upper left corner)
     stim_y = int(scrInfo.current_h/2-stimulus_img.get_rect().size[1]/2) # y-value
 
@@ -364,7 +366,8 @@ def ratingTrial(df_name_rating, df_name_mouse, pp_info, Screen, stimulus, r_scal
                     divis = (scale_anchors[1]-scale_anchors[0])/float(len(label_list)-1) # label-list -1 because of half-intervals at scale ends
                     rating_ord = round(rating/float(divis),0)
                 else:
-                    rating_ord = rating
+                    divis = (scale_anchors[1] - scale_anchors[0]) / float(n_ticks - 1)  # label-list -1 because of half-intervals at scale ends
+                    rating_ord = round(rating / float(divis), 0)
 
                 dt = dt-non_dec_time
                 # print(non_dec_time)
@@ -381,4 +384,8 @@ def ratingTrial(df_name_rating, df_name_mouse, pp_info, Screen, stimulus, r_scal
                     saveRatingData(df_name_rating, pp_info, trial_number, stim_name, rating, rating_ord, dt,
                                    non_dec_time, **kwargs)
                     trial_end = True
-    return trial_number, rating, non_dec_time, inside_box, kwargs
+
+    if not return_list:
+        return [trial_number, rating, dt, non_dec_time, stim_type]
+    else:
+        return return_list
